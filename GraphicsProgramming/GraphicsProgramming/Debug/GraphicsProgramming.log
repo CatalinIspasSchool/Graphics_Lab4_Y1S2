@@ -1,6 +1,0 @@
-﻿  Scene.cpp
-D:\ECHO\Engineering\C.Ispas\Graphics_Lab3_Y1S2\GraphicsProgramming\GraphicsProgramming\Scene.cpp(121,18): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-D:\ECHO\Engineering\C.Ispas\Graphics_Lab3_Y1S2\GraphicsProgramming\GraphicsProgramming\Scene.cpp(141,39): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-D:\ECHO\Engineering\C.Ispas\Graphics_Lab3_Y1S2\GraphicsProgramming\GraphicsProgramming\Scene.cpp(141,29): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-D:\ECHO\Engineering\C.Ispas\Graphics_Lab3_Y1S2\GraphicsProgramming\GraphicsProgramming\Scene.cpp(141,18): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-  GraphicsProgramming.vcxproj -> D:\ECHO\Engineering\C.Ispas\Graphics_Lab3_Y1S2\GraphicsProgramming\Debug\GraphicsProgramming.exe

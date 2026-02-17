@@ -36,24 +36,24 @@ void Scene::render() {
 	// Reset transformations
 	glLoadIdentity();
 	// Set the camera
-	gluLookAt(0.0f, 0.0f, 6.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	gluLookAt(0.0f, -5.0f, 8.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	
 	//lighting
 	GLfloat Light_Ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-	GLfloat Light_Diffuse[] = { 1.0f, 1.0f, 1.0f, 0.0f };
-	GLfloat Light_DiffuseDirection[] = { 0.0f, -1.0f, 0.0f, 0.0f };
+	GLfloat Light_Diffuse[] = { 1.f, 1.f, 1.f, 0.0f };
+	GLfloat Light_DiffuseDirection[] = { 0.5f, 2.0f, 0.3f, 0.0f };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, Light_Ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, Light_Diffuse);
 	glLightfv(GL_LIGHT0, GL_POSITION, Light_DiffuseDirection); 
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT0);
 
 
 	// Render geometry/scene here -------------------------------------
 	
-	placePointLight();
+	//placePointLight();
 
-	drawCube();
+	drawSpheres();
 
 	// End render geometry --------------------------------------
 
@@ -77,7 +77,7 @@ void Scene::initialiseOpenGL()
 	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
 
 	//lighting initialization
-	glEnable(GL_COLOR_MATERIAL);
+	//glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);
 
 
@@ -115,9 +115,48 @@ void Scene::resize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void Scene::useMaterialPlainRed()
+{
+	GLfloat no_mat[] = { 0.0, 0.0, 0.0, 0.0 };
+	GLfloat mat_ambient_colour[] = { 0.8, 0.8, 0.2, 1.0 };
+	GLfloat mat_diff_red[] = { 1.0, 0.0, 0.0, 1.0 };
+	GLfloat mat_diff_blue[] = { 0.1, 0.5, 0.8, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat no_shininess = 0.0;
+	GLfloat low_shininess = 50;
+	GLfloat high_shininess = 100;
+	GLfloat mat_emission[] = { 0.3, 0.2, 0.2, 0.0 };
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_diff_red);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+	glMateriali(GL_FRONT, GL_SHININESS, no_shininess);
+	glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
+
+}
+
+void Scene::useMaterialMildShineRed()
+{
+	GLfloat no_mat[] = { 0.0, 0.0, 0.0, 0.0 };
+	GLfloat mat_ambient_colour[] = { 0.8, 0.8, 0.2, 1.0 };
+	GLfloat mat_diff_red[] = { 1.0, 0.0, 0.0, 1.0 };
+	GLfloat mat_diff_blue[] = { 0.1, 0.5, 0.8, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat no_shininess = 0.0;
+	GLfloat low_shininess = 50;
+	GLfloat high_shininess = 100;
+	GLfloat mat_emission[] = { 0.3, 0.2, 0.2, 0.0 };
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_diff_red);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMateriali(GL_FRONT, GL_SHININESS, low_shininess);
+	glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
+
+}
+
 void Scene::placePointLight()
 {
 	glPushMatrix();	//StartCube
+		glTranslatef(0, 0, 1);
 		glRotatef(time / 50, 0, 0, 1);
 		glTranslatef(0, 1.5, 0);
 
@@ -135,61 +174,24 @@ void Scene::placePointLight()
 }
 
 
-void Scene::drawCube()
+void Scene::drawSpheres()
 {
-	glPushMatrix();	//StartCube
-		glRotatef(time / 50, time / 5, time / 10, 1);
-		glBegin(GL_QUADS);
-			//face 1
-			glNormal3f(0.0f, 0.0f, 1.0f);
-			glColor3f(1.f, 0.f, 0.f);
-			glVertex3f(-0.5f, 0.5f, 0.5f);
-			glVertex3f(0.5f, 0.5f, 0.5f);
-			glVertex3f(0.5f, -0.5f, 0.5f);
-			glVertex3f(-0.5f, -0.5f, 0.5f);
+	glPushMatrix();
+		useMaterialPlainRed();
+		glTranslatef(-3.0, 0.0, 0.0);
+		gluSphere(gluNewQuadric(), 0.6, 40, 40);
+	glPopMatrix();
+	glPushMatrix();
+		useMaterialMildShineRed();
+		glTranslatef(0.0, 0.0, 0.0);
+		gluSphere(gluNewQuadric(), 0.6, 40, 40);
+	glPopMatrix();
+	glPushMatrix();
+		useMaterialPlainRed();
+		glTranslatef(3.0, 0.0, 0.0);
+		gluSphere(gluNewQuadric(), 0.6, 40, 40);
+	glPopMatrix();
 
-			//face 2
-			glNormal3f(0.0f, 1.0f, 0.0f);
-			glColor3f(0.f, 0.f, 1.f);
-			glVertex3f(-0.5f, 0.5f, -0.5f);
-			glVertex3f(0.5f, 0.5f, -0.5f);
-			glVertex3f(0.5f, 0.5f, 0.5f);
-			glVertex3f(-0.5f, 0.5f, 0.5f);
-
-			//face 3
-			glNormal3f(0.0f, 0.0f, -1.0f);
-			glColor3f(1.f, 0.f, 0.f);
-			glVertex3f(-0.5f, 0.5f, -0.5f);
-			glVertex3f(0.5f, 0.5f, -0.5f);
-			glVertex3f(0.5f, -0.5f, -0.5f);
-			glVertex3f(-0.5f, -0.5f, -0.5f);
-
-			//face 4
-			glNormal3f(0.0f, -1.0f, 0.0f);
-			glColor3f(0.0f, 0.0f, 1.0f);
-			glVertex3f(-0.5f, -0.5f, -0.5f);
-			glVertex3f(0.5f, -0.5f, -0.5f);
-			glVertex3f(0.5f, -0.5f, 0.5f);
-			glVertex3f(-0.5f, -0.5f, 0.5f);
-
-			//face 5
-			glNormal3f(-1.0f, 0.0f, 0.0f);
-			glColor3f(0.0f, 1.0f, 0.0f);
-			glVertex3f(-0.5f, 0.5f, 0.5f);
-			glVertex3f(-0.5f, 0.5f, -0.5f);
-			glVertex3f(-0.5f, -0.5f, -0.5f);
-			glVertex3f(-0.5f, -0.5f, 0.5f);
-
-			//face 6
-			glNormal3f(1.0f, 0.0f, 0.0f);
-			glColor3f(0.0f, 1.0f, 0.0f);
-			glVertex3f(0.5f, 0.5f, 0.5f);
-			glVertex3f(0.5f, 0.5f, -0.5f);
-			glVertex3f(0.5f, -0.5f, -0.5f);
-			glVertex3f(0.5f, -0.5f, 0.5f);
-
-		glEnd();
-	glPopMatrix(); //EndCube
 }
 
 // Calculates FPS

@@ -39,9 +39,13 @@ protected:
 	void renderTextOutput();
 	void calculateFPS();
 
+	// use materials
+	void useMaterialPlainRed();
+	void useMaterialMildShineRed();
+
 	// draw primitive functions
 	void placePointLight();
-	void drawCube();
+	void drawSpheres();
 
 	// For access to user input.
 	Input* input;
