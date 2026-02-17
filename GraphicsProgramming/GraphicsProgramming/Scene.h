@@ -42,8 +42,10 @@ protected:
 	// use materials
 	void useMaterialPlainRed();
 	void useMaterialMildShineRed();
+	void useMaterialHighShineRed();
 
 	// draw primitive functions
+	void placeDiffuseLight();
 	void placePointLight();
 	void drawSpheres();
 

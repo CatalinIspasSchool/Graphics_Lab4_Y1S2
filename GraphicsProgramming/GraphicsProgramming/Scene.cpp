@@ -36,22 +36,15 @@ void Scene::render() {
 	// Reset transformations
 	glLoadIdentity();
 	// Set the camera
-	gluLookAt(0.0f, -5.0f, 8.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	gluLookAt(0.0f, -10.0f, 16.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 	
 	//lighting
-	GLfloat Light_Ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-	GLfloat Light_Diffuse[] = { 1.f, 1.f, 1.f, 0.0f };
-	GLfloat Light_DiffuseDirection[] = { 0.5f, 2.0f, 0.3f, 0.0f };
+	//placeDiffuseLight();
 
-	glLightfv(GL_LIGHT0, GL_AMBIENT, Light_Ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, Light_Diffuse);
-	glLightfv(GL_LIGHT0, GL_POSITION, Light_DiffuseDirection); 
-	glEnable(GL_LIGHT0);
-
+	placePointLight();
 
 	// Render geometry/scene here -------------------------------------
 	
-	//placePointLight();
 
 	drawSpheres();
 
@@ -141,9 +134,7 @@ void Scene::useMaterialMildShineRed()
 	GLfloat mat_diff_red[] = { 1.0, 0.0, 0.0, 1.0 };
 	GLfloat mat_diff_blue[] = { 0.1, 0.5, 0.8, 1.0 };
 	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat no_shininess = 0.0;
-	GLfloat low_shininess = 50;
-	GLfloat high_shininess = 100;
+	GLfloat low_shininess = 16.f;
 	GLfloat mat_emission[] = { 0.3, 0.2, 0.2, 0.0 };
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, mat_diff_red);
@@ -153,19 +144,76 @@ void Scene::useMaterialMildShineRed()
 
 }
 
+void Scene::useMaterialHighShineRed()
+{
+	GLfloat no_mat[] = { 0.0, 0.0, 0.0, 0.0 };
+	GLfloat mat_ambient_colour[] = { 0.8, 0.8, 0.2, 1.0 };
+	GLfloat mat_diff_red[] = { 1.0, 0.0, 0.0, 1.0 }; //
+	GLfloat mat_diff_yellow[] = { 0.75, 0.75, 0.1, 1.0 }; //
+	GLfloat mat_diff_blue[] = { 0.1, 0.5, 0.8, 1.0 };
+	GLfloat mat_specular[] = { 0.75, 0.75, 1, 1.0 };//
+	GLfloat high_shininess = 16.f;//
+	GLfloat mat_emission[] = { 0.0, 0.0, 0.0, 1.0 };
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_diff_yellow);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diff_yellow);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_emission);
+
+}
+
+void Scene::placeDiffuseLight()
+{
+	glPushMatrix();	//StartCube
+		glTranslatef(0, 0, 2);
+		glRotatef(time / 50, 1, 0, 0);
+		glTranslatef(0, 0, 4.5);
+
+		GLfloat Light_Ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+		GLfloat Light_Diffuse[] = { 1.f, 1.f, 1.f, 0.0f };
+		GLfloat Light_DiffuseDirection[] = { 0.f, 1.f, 0.f, 0.0f };
+
+		glLightfv(GL_LIGHT0, GL_AMBIENT, Light_Ambient);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, Light_Diffuse);
+		glLightfv(GL_LIGHT0, GL_POSITION, Light_DiffuseDirection);
+		glEnable(GL_LIGHT0);
+
+		glutWireSphere(0.3, 10, 7);
+
+	glPopMatrix(); //EndCube
+
+}
+
 void Scene::placePointLight()
 {
 	glPushMatrix();	//StartCube
-		glTranslatef(0, 0, 1);
+		glTranslatef(0, 0, 2);
 		glRotatef(time / 50, 0, 0, 1);
-		glTranslatef(0, 1.5, 0);
+		glTranslatef(0, 2.5, 0);
 
+		GLfloat Light_Ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 		GLfloat Light_Point[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		GLfloat Light_PointLocation[] = { 0.0f, 0.f, 0.0f, 1.0f };
+		//GLfloat Spot_Direction[] = {0.0f, -1.0f, 0.0f};
 
+		glLightfv(GL_LIGHT1, GL_AMBIENT, Light_Ambient);
 		glLightfv(GL_LIGHT1, GL_DIFFUSE, Light_Point);
+		glLightfv(GL_LIGHT1, GL_SPECULAR, Light_Point);
 		glLightfv(GL_LIGHT1, GL_POSITION, Light_PointLocation);
+
+		//glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, Spot_Direction);
+		//glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 25.0f);
+		//glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 50.0f);
+
+
+		//glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.7);
+		//glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.2);
+		//glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.1);
+		//glEnable(GL_LIGHT0);
+
 		glEnable(GL_LIGHT1);
+		//glDisable(GL_LIGHT0);
 
 		glutWireSphere(0.3, 10, 7);
 
@@ -187,7 +235,7 @@ void Scene::drawSpheres()
 		gluSphere(gluNewQuadric(), 0.6, 40, 40);
 	glPopMatrix();
 	glPushMatrix();
-		useMaterialPlainRed();
+		useMaterialHighShineRed();
 		glTranslatef(3.0, 0.0, 0.0);
 		gluSphere(gluNewQuadric(), 0.6, 40, 40);
 	glPopMatrix();
